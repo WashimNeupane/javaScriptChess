@@ -1,10 +1,8 @@
 let numSquares = 64;
-let endgame = 0;
+let sColors = ["#ffffc2","lightgreen"];
 const chessBoard = document.getElementById("mainChessBoard");
 initialiseBoard();
 makeMove();
-
-
 
 //draws the chessBoard. generates the index. places each piece into appropriate place. 
 function initialiseBoard(){
@@ -13,12 +11,27 @@ function initialiseBoard(){
         const square = document.createElement('div');
         square.classList.add('squares');
         square.id = i+1;
-        square.style.backgroundColor= parseInt((i/8)+i)%2==0?'#ffffcc':'lightgreen';
-        square.innerHTML = square.id;
+        square.style.backgroundColor= parseInt((i/8)+i)%2==0?sColors[0]:sColors[1];
         chessBoard.appendChild(square);
+        //pawns
+        if(square.id>=9 && square.id<=16){square.innerHTML = "p"; square.style.color="blue";}
+        else if(square.id>=49 && square.id<=56){square.innerHTML = "p";}
+        //rook
+        else if(square.id==1 || square.id == 8) {square.innerHTML = "r";square.style.color="blue";}
+        else if(square.id==57 || square.id == 64) {square.innerHTML = "r";}
+        //knight
+        else if(square.id==2 || square.id == 7) {square.innerHTML = "n";square.style.color="blue";}
+        else if(square.id==58 || square.id == 63) {square.innerHTML = "n"}
+        //bishop
+        else if(square.id==3 || square.id == 6) {square.innerHTML = "b";square.style.color="blue";}
+        else if(square.id==59 || square.id == 62) {square.innerHTML = "b";}
+        //queen
+        else if(square.id==4 ) {square.innerHTML = "q";square.style.color="blue";}
+        else if(square.id==60) {square.innerHTML = "q";}
+        //king
+        else if(square.id==5) {square.innerHTML = "k";square.style.color="blue";}
+        else if(square.id==61) {square.innerHTML = "k";}
     }
-
-
 }
 
 //selects two squares(i.e TO and FROM). If move possible, then call the function that moves the piece.
@@ -58,7 +71,7 @@ function removeSquareSelection()
     const sq = document.querySelectorAll('.squares');
     for(let i=0;i<numSquares;i++)
     {
-        document.getElementById(i+1).style.backgroundColor = parseInt((i/8)+i)%2==0?'#ababaa':'white';
+        document.getElementById(i+1).style.backgroundColor = parseInt((i/8)+i)%2==0?sColors[0]:sColors[1];
     }
 }
 
