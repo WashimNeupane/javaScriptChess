@@ -145,8 +145,6 @@ function isLegal(index) {
         case 'b':
         case 'q':
             let divisor;
-            console.log("ROW  "+current_row+" "+target_row);
-            console.log("COL  "+current_col+" "+target_col);
             if((target_row>current_row && target_col<current_col)||(target_row<current_row && target_col>current_col)){divisor = 7;}
             else{divisor =9;}
             console.log("DIV ==  "+divisor);
@@ -156,6 +154,10 @@ function isLegal(index) {
         case 'q':
             if(current_row==target_row || current_col==target_col)
                 return true;
+        
+        case 'n':
+            let possibleStates = [6,10,15,17];
+            if (possibleStates.indexOf(Math.abs(idx[1]-idx[0]))>-1){return true;}
     }
     return false;
 }
