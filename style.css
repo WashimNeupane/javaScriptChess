@@ -1,0 +1,15 @@
+#mainChessBoard
+{
+    width:640px;
+    height:640px;
+    border:1px solid black;
+    display: inline-block;
+   margin:5% 0 0 30%;
+}
+
+.squares
+{
+ width:80px;
+ height:80px;
+ float:left;
+}
