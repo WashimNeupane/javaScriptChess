@@ -134,30 +134,37 @@ function isLegal(index) {
                 return true;}
             else if((sq[idx[1]].innerHTML!="" && idx[1]==idx[0]+shift-1) || (idx[1]==idx[0]+shift+1 && sq[idx[1]].innerHTML!=""))
                 {return true;}
-            else if((idx[0]<17||idx[0]>48) && idx[1]==idx[0]+(2*shift))
+            else if((idx[0]<17||idx[0]>48) && idx[1]==idx[0]+(2*shift) && sq[idx[1]].innerHTML=="" && sq[idx[1]-shift].innerHTML=="")
                 {return true;}
-        
+                break;
         case 'k':
-        case 'q':
             if((idx[1]<=idx[0]+shift+1 && idx[1]>=idx[0]+shift-1) || (idx[1]>=idx[0]-1 && idx[1]<=idx[0]+1) || (idx[1]>=idx[0]-shift-1 && idx[1]<=idx[0]-shift+1))
                 return true;
-
+                break;
         case 'b':
-        case 'q':
-            let divisor;
-            if((target_row>current_row && target_col<current_col)||(target_row<current_row && target_col>current_col)){divisor = 7;}
-            else{divisor =9;}
-            console.log("DIV ==  "+divisor);
-            if((Math.abs(idx[1]-idx[0])%divisor==0))
-                return true;
+            return isDiagonal(idx,target_row,target_col,current_row,current_col);
+            break;
         case 'r':
-        case 'q':
             if(current_row==target_row || current_col==target_col)
                 return true;
-        
+            break;
         case 'n':
             let possibleStates = [6,10,15,17];
             if (possibleStates.indexOf(Math.abs(idx[1]-idx[0]))>-1){return true;}
+            break
+        case 'q':
+            return (isDiagonal(idx,target_row,target_col,current_row,current_col)||(current_row==target_row || current_col==target_col));
+            break;
     }
+    return false;
+}
+
+function isDiagonal(idx,target_row,target_col,current_row,current_col){
+    let divisor;
+    if((target_row>current_row && target_col<current_col)||(target_row<current_row && target_col>current_col)){divisor = 7;}
+    else{divisor =9;}
+    console.log("DIV ==  "+divisor);
+    if((Math.abs(idx[1]-idx[0])%divisor==0))
+        return true;
     return false;
 }
