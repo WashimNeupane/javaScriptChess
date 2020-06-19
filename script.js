@@ -1,5 +1,5 @@
 let numSquares = 64;
-let sColors = ["#ffffc2", "lightgreen"];
+let sColors = ["rgb(100,100,100)", "lightblue"];
 const chessBoard = document.getElementById("mainChessBoard");
 initialiseBoard();
 play();
@@ -13,29 +13,29 @@ function initialiseBoard() {
         square.id = i + 1;
         chessBoard.appendChild(square);
         //pawns
-        if (square.id >= 9 && square.id <= 16) { square.innerHTML = "p";}
-        else if (square.id >= 49 && square.id <= 56) { square.innerHTML = "p"; }
+        if (square.id >= 9 && square.id <= 16) { square.innerHTML = "o"; }
+        else if (square.id >= 49 && square.id <= 56) { square.innerHTML = "o"; }
         //rook
-        else if (square.id == 1 || square.id == 8) { square.innerHTML = "r";}
-        else if (square.id == 57 || square.id == 64) { square.innerHTML = "r"; }
+        else if (square.id == 1 || square.id == 8) { square.innerHTML = "t"; }
+        else if (square.id == 57 || square.id == 64) { square.innerHTML = "t"; }
         //knight
-        else if (square.id == 2 || square.id == 7) { square.innerHTML = "n";}
-        else if (square.id == 58 || square.id == 63) { square.innerHTML = "n" }
+        else if (square.id == 2 || square.id == 7) { square.innerHTML = "m"; }
+        else if (square.id == 58 || square.id == 63) { square.innerHTML = "m" }
         //bishop
-        else if (square.id == 3 || square.id == 6) { square.innerHTML = "b";}
-        else if (square.id == 59 || square.id == 62) { square.innerHTML = "b"; }
+        else if (square.id == 3 || square.id == 6) { square.innerHTML = "v"; }
+        else if (square.id == 59 || square.id == 62) { square.innerHTML = "v"; }
         //queen
-        else if (square.id == 4) { square.innerHTML = "q";}
-        else if (square.id == 60) { square.innerHTML = "q"; }
+        else if (square.id == 4) { square.innerHTML = "w"; }
+        else if (square.id == 60) { square.innerHTML = "w"; }
         //king
-        else if (square.id == 5) { square.innerHTML = "k";}
-        else if (square.id == 61) { square.innerHTML = "k"; }
+        else if (square.id == 5) { square.innerHTML = "l"; }
+        else if (square.id == 61) { square.innerHTML = "l"; }
         //other squares
         else { square.innerHTML = ""; }
 
         //assign to black or white class
-        if(square.id<17){square.classList.add('white'); square.style.color = "blue";}
-        else if(square.id>48){square.classList.add('black');}
+        if (square.id < 17) { square.classList.add('white'); square.style.color = "white"; }
+        else if (square.id > 48) { square.classList.add('black'); }
     }
 }
 
@@ -47,17 +47,16 @@ function play() {
     sq.forEach(item => {
         item.addEventListener('mousedown', event => {
 
-            console.log(counter);
             //check number of clicks ==2 because you only need to move piece from index1 to index2 (i.e 2 clicks)
             if (counter == 1) {
-                index.push(item.id-1);
+                index.push(item.id - 1);
                 if (isLegal(index)) {
                     movePiece(index);
                 }
                 else {
                     console.log("Illegal move made.Select another.");
                 }
-                removeSquareSelection();
+                removeSquareSelection(index[0]);
                 index = [];
                 counter = 0;
                 return 0;
@@ -65,8 +64,7 @@ function play() {
             //else highlight the square
             else {
                 item.style.backgroundColor = "orange";
-                index.push(item.id-1);
-                console.log(item.id-1);
+                index.push(item.id - 1);
                 counter++;
             }
         })
@@ -74,11 +72,8 @@ function play() {
 }
 
 //removes highlighted squares after move is made
-function removeSquareSelection() {
-    const sq = document.querySelectorAll('.squares');
-    for (let i = 0; i < numSquares; i++) {
-        document.getElementById(i + 1).style.backgroundColor = parseInt((i / 8) + i) % 2 == 0 ? sColors[0] : sColors[1];
-    }
+function removeSquareSelection(i) {
+    document.getElementById(i + 1).style.backgroundColor = parseInt((i / 8) + i) % 2 == 0 ? sColors[0] : sColors[1];
 }
 
 //move piece from one index to the next. this is called when a legal move is made
@@ -97,9 +92,8 @@ function movePiece(index) {
     sq[index[1]].classList.add(currentPlayer[1]);
 
     //check if pawn is being promoted
-    if(sq[index[1]].innerHTML=='p' && (index[1]>55 || index[1]<8))
-    {
-        let promote = prompt("Pawn is getting promoted. Select 'q' for queen, 'b' for bishop,'n' for night,'r' for rook","q");
+    if (sq[index[1]].innerHTML == 'o' && (index[1] > 55 || index[1] < 8)) {
+        let promote = prompt("Pawn is getting promoted. Select 'q' for queen, 'b' for bishop,'n' for night,'r' for rook", "q");
         sq[index[1]].innerHTML = promote;
     };
 }
@@ -107,64 +101,77 @@ function movePiece(index) {
 //check of a certain piece is making a legally allowed move
 function isLegal(index) {
     let sq = document.querySelectorAll('.squares');
-    let idx=[]; idx.push(Number(index[0]));idx.push(Number(index[1]));
+    let idx = []; idx.push(Number(index[0])); idx.push(Number(index[1]));
 
     //get the row and col index of the given square
-    let current_row = Math.floor(idx[0]/8); let target_row = Math.floor(idx[1]/8);
-    let current_col = idx[0]-(8*(current_row)); let target_col = idx[1]-(8*(target_row));
+    let current_row = Math.floor(idx[0] / 8); let target_row = Math.floor(idx[1] / 8);
+    let current_col = idx[0] - (8 * (current_row)); let target_col = idx[1] - (8 * (target_row));
 
     //Since white moves in opposite direction of black, establish which direction to move
     let shift;
     let currentPlayer = sq[index[0]].className.split(/\s+/)[1];
-    if(currentPlayer == "white"){shift = Number(8);}
-    else{shift = Number(-8);}
+    if (currentPlayer == "white") { shift = Number(8); }
+    else { shift = Number(-8); }
+
+    //check how much to move in the given direction. Useful for bishop and queen moves
+    if ((target_row > current_row && target_col < current_col) || (target_row < current_row && target_col > current_col)) { divisor = 7; }
+    else { divisor = 9; }
+    let flidx = []; flidx[0] = idx[1]; flidx[1] = idx[0];
 
     //pieces belonging to the same player cannot take pieces
-    if(sq[index[1]].classList.contains(currentPlayer))
-    {   console.log("You cannot take over your own pieces");
-        return false;}
+    if (sq[index[1]].classList.contains(currentPlayer)) {
+        console.log("You cannot take over your own pieces");
+        return false;
+    }
 
     //pieces cannot move unless it removes checkmate
 
     //for each peice, assing the types of moves they can legally make
-    switch(sq[index[0]].innerHTML){
+    switch (sq[index[0]].innerHTML) {
         //if piece is pawn
-        case 'p':
-            if(idx[1]==idx[0]+shift && sq[idx[1]].innerHTML ==""){
-                return true;}
-            else if((sq[idx[1]].innerHTML!="" && idx[1]==idx[0]+shift-1) || (idx[1]==idx[0]+shift+1 && sq[idx[1]].innerHTML!=""))
-                {return true;}
-            else if((idx[0]<17||idx[0]>48) && idx[1]==idx[0]+(2*shift) && sq[idx[1]].innerHTML=="" && sq[idx[1]-shift].innerHTML=="")
-                {return true;}
-                break;
-        case 'k':
-            if((idx[1]<=idx[0]+shift+1 && idx[1]>=idx[0]+shift-1) || (idx[1]>=idx[0]-1 && idx[1]<=idx[0]+1) || (idx[1]>=idx[0]-shift-1 && idx[1]<=idx[0]-shift+1))
+        case 'o':
+            if (idx[1] == idx[0] + shift && sq[idx[1]].innerHTML == "") {
                 return true;
-                break;
-        case 'b':
-            return isDiagonal(idx,target_row,target_col,current_row,current_col);
+            }
+            else if ((sq[idx[1]].innerHTML != "" && idx[1] == idx[0] + shift - 1) || (idx[1] == idx[0] + shift + 1 && sq[idx[1]].innerHTML != "")) { return true; }
+            else if ((idx[0] < 17 || idx[0] > 47) && idx[1] == idx[0] + (2 * shift) && sq[idx[1]].innerHTML == "" && sq[idx[1] - shift].innerHTML == "") { return true; }
             break;
-        case 'r':
-            if(current_row==target_row || current_col==target_col)
+        case 'l':
+            if ((idx[1] <= idx[0] + shift + 1 && idx[1] >= idx[0] + shift - 1) || (idx[1] >= idx[0] - 1 && idx[1] <= idx[0] + 1) || (idx[1] >= idx[0] - shift - 1 && idx[1] <= idx[0] - shift + 1))
                 return true;
             break;
-        case 'n':
-            let possibleStates = [6,10,15,17];
-            if (possibleStates.indexOf(Math.abs(idx[1]-idx[0]))>-1){return true;}
+        case 'v':
+            return Math.abs(idx[1] - idx[0]) % divisor == 0 ? detectObstruction(idx, divisor) : false;
+            break;
+        case 't':
+            return current_row == target_row || current_col == target_col ? detectObstruction(idx, 8) || detectObstruction(flidx, 1) : false;
+            break;
+        case 'm':
+            let possibleStates = [6, 10, 15, 17];
+            if (possibleStates.indexOf(Math.abs(idx[1] - idx[0])) > -1) { return true; }
             break
-        case 'q':
-            return (isDiagonal(idx,target_row,target_col,current_row,current_col)||(current_row==target_row || current_col==target_col));
+        case 'w':
+            let param1 = current_row == target_row || current_col == target_col ? detectObstruction(idx, 8) || detectObstruction(flidx, 1) : false;
+            let param2 = Math.abs(idx[1] - idx[0]) % divisor == 0 ? detectObstruction(idx, divisor) : false;
+
+            return (param1 || param2);
             break;
     }
     return false;
 }
 
-function isDiagonal(idx,target_row,target_col,current_row,current_col){
-    let divisor;
-    if((target_row>current_row && target_col<current_col)||(target_row<current_row && target_col>current_col)){divisor = 7;}
-    else{divisor =9;}
-    console.log("DIV ==  "+divisor);
-    if((Math.abs(idx[1]-idx[0])%divisor==0))
+//Detects if there is obstruction between start and end position when moving a player. if there is, then move is invalid.
+function detectObstruction(idx, stepSize) {
+    const sq = document.querySelectorAll('.squares');
+    if (idx[1] < idx[0]) {
+        idx[0] = idx[0] - stepSize;
+    }
+    else {
+        idx[0] = idx[0] + stepSize;
+    }
+
+    if (idx[1] == idx[0]) {
         return true;
-    return false;
+    }
+    return sq[idx[0]].innerHTML == "" ? detectObstruction(idx, stepSize) : false;
 }
