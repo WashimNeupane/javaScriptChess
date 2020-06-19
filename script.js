@@ -1,3 +1,34 @@
+//on load function
+    const elem = document.getElementById("navigation");
+    var btn = document.createElement("BUTTON");
+    btn.classList.add("buttons");
+    btn.innerHTML = "NEW GAME";
+    btn.onclick = createNew;
+    elem.appendChild(btn); 
+
+function createNew(){
+    //remove the earlier button
+    const btns = document.querySelectorAll(".buttons")
+    btns.forEach(item=>{
+        item.remove();
+    })
+    //add new buttons
+    var drawButton=document.createElement("BUTTON");
+    drawButton.classList.add("button");
+    drawButton.innerHTML = "DRAW";
+
+    var resignButton=document.createElement("BUTTON");
+    resignButton.classList.add("button");
+    resignButton.innerHTML = "RESIGN";
+    elem.appendChild(resignButton);
+    elem.appendChild(drawButton);
+
+}
+
+
+//after newgame button is clicked
+
+
 let numSquares = 64;
 let sColors = ["rgb(100,100,100)", "lightblue"];
 const chessBoard = document.getElementById("mainChessBoard");
@@ -144,17 +175,34 @@ function isLegal(index) {
             return Math.abs(idx[1] - idx[0]) % divisor == 0 ? detectObstruction(idx, divisor) : false;
             break;
         case 't':
-            return current_row == target_row || current_col == target_col ? detectObstruction(idx, 8) || detectObstruction(flidx, 1) : false;
+            if(target_row==current_row){
+                return detectObstruction(idx,1);
+            }
+            else if(target_col==current_col){
+                return detectObstruction(idx,8);
+            }
+            else{
+                return false;
+            }
             break;
         case 'm':
             let possibleStates = [6, 10, 15, 17];
             if (possibleStates.indexOf(Math.abs(idx[1] - idx[0])) > -1) { return true; }
             break
         case 'w':
-            let param1 = current_row == target_row || current_col == target_col ? detectObstruction(idx, 8) || detectObstruction(flidx, 1) : false;
-            let param2 = Math.abs(idx[1] - idx[0]) % divisor == 0 ? detectObstruction(idx, divisor) : false;
-
-            return (param1 || param2);
+            let param1,param2,param3;
+            if(target_row==current_row){
+                return detectObstruction(idx,1);
+            }
+            else if(target_col==current_col){
+                return detectObstruction(idx,8);
+            }
+            else if(Math.abs(idx[1] - idx[0]) % divisor == 0){
+                return detectObstruction(idx, divisor);
+            }
+            else{
+                return false;
+            }
             break;
     }
     return false;
@@ -170,6 +218,7 @@ function detectObstruction(idx, stepSize) {
         idx[0] = idx[0] + stepSize;
     }
 
+    console.log(sq[idx[0]]);
     if (idx[1] == idx[0]) {
         return true;
     }
