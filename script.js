@@ -81,15 +81,17 @@ function play() {
             //check number of clicks ==2 because you only need to move piece from index1 to index2 (i.e 2 clicks)
             if (counter == 1) {
                 index.push(item.id - 1);
+                item.style.backgroundColor = "orange";
                 if (isLegal(index)) {
                     movePiece(index);
                 }
                 else {
                     console.log("Illegal move made.Select another.");
-                }
-                removeSquareSelection(index[0]);
+                }         
+                
+                removeSquareSelection(index);  
+                counter = 0;              
                 index = [];
-                counter = 0;
                 return 0;
             }
             //else highlight the square
@@ -104,7 +106,8 @@ function play() {
 
 //removes highlighted squares after move is made
 function removeSquareSelection(i) {
-    document.getElementById(i + 1).style.backgroundColor = parseInt((i / 8) + i) % 2 == 0 ? sColors[0] : sColors[1];
+    document.getElementById(i[0] + 1).style.backgroundColor = parseInt((i[0] / 8) + i[0]) % 2 == 0 ? sColors[0] : sColors[1];
+    document.getElementById(i[1] + 1).style.backgroundColor = parseInt((i[1] / 8) + i[1]) % 2 == 0 ? sColors[0] : sColors[1];
 }
 
 //move piece from one index to the next. this is called when a legal move is made
