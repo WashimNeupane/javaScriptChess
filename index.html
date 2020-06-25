@@ -6,12 +6,16 @@
     <title>"A simple javascrpit chess UI game </title>
 </head>
 
-    <body>
+<body onload="loadingIcon()">
+    <div id="loader"></div>
+    <div id=container class="animate-bottom">
         <div id="title">Chess.com</div>
         <div id="navigation">
             <!-- javascript creates a button here. when game not start, button = new game. when game starts, button1= draw, button2 = resign.-->
         </div>
         <div id="mainChessBoard"></div>
-        <script src="script.js"> </script>
-    </body>
+    </div>
+    <script src="script.js"> </script>
+</body>
+
 </html>

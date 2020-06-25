@@ -1,3 +1,12 @@
+function loadingIcon() {
+  var myVar = setTimeout(showPage, 2000);
+}
+
+function showPage() {
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("container").style.display = "block";
+}
+
 //on load function
     const elem = document.getElementById("navigation");
     var btn = document.createElement("BUTTON");
