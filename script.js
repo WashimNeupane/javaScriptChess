@@ -7,39 +7,9 @@ function showPage() {
   document.getElementById("container").style.display = "block";
 }
 
-//on load function
-    const elem = document.getElementById("navigation");
-    var btn = document.createElement("BUTTON");
-    btn.classList.add("buttons");
-    btn.innerHTML = "NEW GAME";
-    btn.onclick = createNew;
-    elem.appendChild(btn); 
-
-function createNew(){
-    //remove the earlier button
-    const btns = document.querySelectorAll(".buttons")
-    btns.forEach(item=>{
-        item.remove();
-    })
-    //add new buttons
-    var drawButton=document.createElement("BUTTON");
-    drawButton.classList.add("button");
-    drawButton.innerHTML = "DRAW";
-
-    var resignButton=document.createElement("BUTTON");
-    resignButton.classList.add("button");
-    resignButton.innerHTML = "RESIGN";
-    elem.appendChild(resignButton);
-    elem.appendChild(drawButton);
-
-}
-
-
 //after newgame button is clicked
-
-
 let numSquares = 64;
-let sColors = ["rgb(100,100,100)", "lightblue"];
+let sColors = ["slategray", ""];
 const chessBoard = document.getElementById("mainChessBoard");
 initialiseBoard();
 play();
@@ -71,7 +41,7 @@ function initialiseBoard() {
         else if (square.id == 5) { square.innerHTML = "l"; }
         else if (square.id == 61) { square.innerHTML = "l"; }
         //other squares
-        else { square.innerHTML = ""; }
+        else { square.innerHTML = "a"; }
 
         //assign to black or white class
         if (square.id < 17) { square.classList.add('white'); square.style.color = "white"; }
@@ -124,7 +94,7 @@ function movePiece(index) {
     let sq = document.querySelectorAll('.squares');
     sq[index[1]].innerHTML = sq[index[0]].innerHTML;
     sq[index[1]].style.color = sq[index[0]].style.color;
-    sq[index[0]].innerHTML = "";
+    sq[index[0]].innerHTML = "a";
 
     //when white takes over black or vice versa, update the current cell to who-ever took over 
     //i.e if black takes over white piece, the new cell is now black
@@ -173,11 +143,11 @@ function isLegal(index) {
     switch (sq[index[0]].innerHTML) {
         //if piece is pawn
         case 'o':
-            if (idx[1] == idx[0] + shift && sq[idx[1]].innerHTML == "") {
+            if (idx[1] == idx[0] + shift && sq[idx[1]].innerHTML == "a") {
                 return true;
             }
-            else if ((sq[idx[1]].innerHTML != "" && idx[1] == idx[0] + shift - 1) || (idx[1] == idx[0] + shift + 1 && sq[idx[1]].innerHTML != "")) { return true; }
-            else if ((idx[0] < 17 || idx[0] > 47) && idx[1] == idx[0] + (2 * shift) && sq[idx[1]].innerHTML == "" && sq[idx[1] - shift].innerHTML == "") { return true; }
+            else if ((sq[idx[1]].innerHTML != "a" && idx[1] == idx[0] + shift - 1) || (idx[1] == idx[0] + shift + 1 && sq[idx[1]].innerHTML != "a")) { return true; }
+            else if ((idx[0] < 17 || idx[0] > 47) && idx[1] == idx[0] + (2 * shift) && sq[idx[1]].innerHTML == "a" && sq[idx[1] - shift].innerHTML == "a") { return true; }
             break;
         case 'l':
             if ((idx[1] <= idx[0] + shift + 1 && idx[1] >= idx[0] + shift - 1) || (idx[1] >= idx[0] - 1 && idx[1] <= idx[0] + 1) || (idx[1] >= idx[0] - shift - 1 && idx[1] <= idx[0] - shift + 1))
@@ -234,5 +204,5 @@ function detectObstruction(idx, stepSize) {
     if (idx[1] == idx[0]) {
         return true;
     }
-    return sq[idx[0]].innerHTML == "" ? detectObstruction(idx, stepSize) : false;
+    return sq[idx[0]].innerHTML == "a" ? detectObstruction(idx, stepSize) : false;
 }
