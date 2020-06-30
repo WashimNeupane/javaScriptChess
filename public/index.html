@@ -2,9 +2,40 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="index.css">
     <title>"A simple javascrpit chess UI game </title>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
 </head>
+
+<script src="./socket.io/socket.io.js"></script>
+<link rel="stylesheet" href="./index.css">
+<script>
+    var socket = io();
+    function setUsername() {
+        socket.emit('setUsername', document.getElementById('name').value);
+    };
+    var user;
+    socket.on('userExists', function (data) {
+        document.getElementById('error-container').innerHTML = data;
+    });
+    socket.on('userSet', function (data) {
+        user = data.username;
+        document.getElementById('msgbox').innerHTML = '<input type = "text" id = "message">\
+       <button type = "button" name = "button" onclick = "sendMessage()">Send</button>\
+       <div class="cbox" id = "message-container">Welcome</div>';
+    });
+    function sendMessage() {
+        var msg = document.getElementById('message').value;
+        if (msg) {
+            socket.emit('msg', { message: msg, user: user });
+        }
+    }
+    socket.on('newmsg', function (data) {
+        if (user) {
+            document.getElementById('message-container').innerHTML += '<b>' +
+                data.user + '</b>: ' + data.message + '<br />';
+        }
+    })
+</script>
 
 <body>
     <div class="root">
@@ -13,12 +44,22 @@
         <div class="chessboardContainer">
             <div class="gameboard" id="mainChessBoard"></div>
             <div class="stats">
-                <div class ="player" id="player1">Player</div>
-                <div class ="player" id="player2">Player</div>
+                <div class="player" id="player1"></div>
+                <div class="player" id="player2"></div>
+            </div>
+            <div class="msgg" id="msgbox">
+                <form>
+                <input id="name" type="text" name="name" value="" placeholder="Enter your name!" required>
+                <button type="button" name="button" onclick="setUsername()">
+                    Start game!
+                </button>
+                </form>
+                <div class="cbox" id="error-container"></div>
             </div>
         </div>
         <div class="footer">footer</div>
-      </div>
+    </div>
     <script src="gamelogic.js"> </script>
 </body>
+
 </html>
