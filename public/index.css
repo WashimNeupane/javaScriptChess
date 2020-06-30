@@ -1,4 +1,4 @@
-@font-face { font-family: chessPiece; src: url('fonts/CASEFONT.TTF'); } 
+@font-face { font-family: chessPiece; src: url('./fonts/CASEFONT.TTF'); } 
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -22,10 +22,11 @@ body {
   grid-area: content;
   display: grid;
   grid-gap:10px;
-  grid-template-columns: 2fr 1fr;
-  grid-template-rows: 1fr;
+  grid-template-columns: 2fr 1.5fr;
+  grid-template-rows: 1fr 1fr;
   grid-template-areas: 
-    "board gamestats";
+    "board gamestats"
+    "board chatbox"
 }
 .squares{
   border: 1px solid slategrey;
@@ -58,6 +59,16 @@ body {
   grid-area: footer;
 }
 
+.msgg{
+  grid-area:chatbox;
+  overflow:hidden;
+}
+
+.cbox{
+  height:150px;
+  overflow-y: scroll;
+  background-color: yellow;
+}
 .root {
   height: 100vh;
   min-height: 400px;
@@ -75,12 +86,11 @@ body {
 }
 
 @media (max-width:700px){
- 
-  .root{
+   .root{
   min-height: 300px;
   min-width: 200px;
   grid-template-columns: 1fr;
-  grid-template-rows:1fr 6fr 1fr;
+  grid-template-rows:1fr 8fr 1fr;
   grid-gap:3%;
   grid-template-areas:
     "advert"
@@ -89,20 +99,19 @@ body {
   }
 
   .chessboardContainer{    
-    grid-template-columns: 1fr 100fr 1fr;
+    grid-template-columns: 1fr;
+    grid-template-rows:2fr 1fr;
     grid-template-areas: 
-      "advert board stats";
+      "board"
+      "chatbox";
     }
-  .title{
+  .title, .footer, .stats{
     display: none;
   }
-
   .gameboard{
     border-radius: 0%;
     font-size: calc(7vh);
   }
-
-
   .stats{
     display: none;
   }
